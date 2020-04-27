@@ -27,7 +27,7 @@ struct SimpleString {
         buffer = new_buffer;
         length = other.length;
         max_size = other.max_size;
-        strcpy_s(buffer, max_size, other.buffer);
+        std::strncpy(buffer, other.buffer, max_size);
         return *this;
     }
 
@@ -63,6 +63,8 @@ struct SimpleStringOwner {
         }
         string.print("Constructed");
     }
+
+    SimpleStringOwner(const SimpleString& my_string): string { my_string } { }
 
     ~SimpleStringOwner() {
         string.print("About to destroy");
@@ -135,9 +137,29 @@ void dont_do_this() {
     b = a;
 }
 
-int main() {
+int main4() {
     SimpleString a{ 20 };
     foo(a);
     a.print("Still empty");
+    return 0;
+}
+
+void own_a_string() {
+    SimpleString a{ 50 };
+    a.append_line("We apologize for the");
+    a.append_line("inconvenience.");
+    SimpleStringOwner b{ a };
+}
+
+int main() {
+    SimpleString a{ 50 };
+    a.append_line("We apologize for the");
+    SimpleString b{ 50 };
+    b.append_line("Last message");
+    a.print("a");
+    b.print("b");
+    b = a;
+    a.print("a");
+    b.print("b");
     return 0;
 }
