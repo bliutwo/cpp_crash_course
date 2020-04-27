@@ -13,6 +13,13 @@ struct SimpleString {
         buffer[0] = 0;
     }
 
+    SimpleString(const SimpleString& other)
+        : max_size{ other.max_size },
+          buffer{ new char[other.max_size] },
+          length{ other.length } {
+          std::strncpy(buffer, other.buffer, max_size);
+    }
+
     ~SimpleString() {
         delete[] buffer;
     }
@@ -54,6 +61,15 @@ private:
     SimpleString string;
 };
 
+void fn_c() {
+    SimpleStringOwner c{ "cccccccccc" };
+}
+
+void fn_b() {
+    SimpleStringOwner b{ "b" };
+    fn_c();
+}
+
 int main2() {
     SimpleString string{ 115 };
     string.append_line("Starbuck, whaddya hear?");
@@ -68,8 +84,49 @@ int main2() {
     return 0;
 }
 
-int main() {
+int main1() {
     SimpleStringOwner x{ "x" };
     printf("x is alive\n");
+    return 0;
+}
+
+int main0() {
+    try {
+        SimpleStringOwner a{ "a" };
+        fn_b();
+        SimpleStringOwner d{ "d" };
+    } catch(const std::exception& e) {
+        printf("Exception: %s\n", e.what());
+    }
+    return 0;
+}
+
+int main3() {
+    SimpleString a{ 50 };
+    a.append_line("We apologize for the");
+    SimpleString a_copy{ a };
+    a.append_line("inconvenience.");
+    a_copy.append_line("incontinence.");
+    a.print("a");
+    a_copy.print("a_copy");
+    return 0;
+}
+
+void foo(SimpleString x) {
+    x.append_line("This change is lost.");
+}
+
+void dont_do_this() {
+    SimpleString a{ 50 };
+    a.append_line("We apologize for the");
+    SimpleString b{ 50 };
+    b.append_line("Last message");
+    b = a;
+}
+
+int main() {
+    SimpleString a{ 20 };
+    foo(a);
+    a.print("Still empty");
     return 0;
 }
