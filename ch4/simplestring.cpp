@@ -20,6 +20,17 @@ struct SimpleString {
           std::strncpy(buffer, other.buffer, max_size);
     }
 
+    SimpleString& operator=(const SimpleString& other) {
+        if (this == &other) return *this;
+        const auto new_buffer = new char[other.max_size];
+        delete[] buffer;
+        buffer = new_buffer;
+        length = other.length;
+        max_size = other.max_size;
+        strcpy_s(buffer, max_size, other.buffer);
+        return *this;
+    }
+
     ~SimpleString() {
         delete[] buffer;
     }
