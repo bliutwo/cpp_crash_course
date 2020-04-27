@@ -20,3 +20,8 @@ private:
     char* buffer;
     size_t length;
 };
+
+int main() {
+    SimpleString s = SimpleString(-1);
+    return 0;
+}
