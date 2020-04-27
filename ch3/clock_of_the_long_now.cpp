@@ -2,9 +2,9 @@
 
 class ClockOfTheLongNow {
 private:
-    int year;
+    long int year;
 public:
-    ClockOfTheLongNow(int year_in) {
+    ClockOfTheLongNow(long int year_in) {
         if(!set_year(year_in)) {
             year = 2019;
         }
@@ -15,7 +15,7 @@ public:
     void add_year() {
         year++;
     }
-    bool set_year(int year) {
+    bool set_year(long int year) {
         if (year < 2019) return false;
         this->year = year;
         return true;
@@ -64,4 +64,5 @@ int main() {
     Avout jad{ "Jad", 4000 };
     raz.announce();
     jad.announce();
+    return 0;
 }
