@@ -25,6 +25,21 @@ public:
     }
 };
 
+struct Avout {
+    Avout(const char* name, long year_of_apert)
+        : name{ name }, apert{ year_of_apert } {
+    }
+    void announce() const {
+        printf("My name is %s and my next apert is %d.\n", name, apert.get_year());
+    }
+    const char* name;
+    ClockOfTheLongNow apert;
+};
+
+// void does_not_compile(const Avout& avout) {
+//     avout.apert.add_year(); // Compiler error: avout is const
+// }
+
 bool is_leap_year(const ClockOfTheLongNow& clock) {
     if (clock.get_year() % 4 > 0 ) return false;
     if (clock.get_year() % 100 > 0) return true;
@@ -33,7 +48,7 @@ bool is_leap_year(const ClockOfTheLongNow& clock) {
 }
 
 
-int main() {
+int main2() {
     ClockOfTheLongNow clock;
     ClockOfTheLongNow* clock_ptr = &clock;
     clock_ptr->set_year(2020);
@@ -42,4 +57,11 @@ int main() {
     printf("Value of clock's year: %d\n", (*clock_ptr).get_year());
     printf("%d\n", is_leap_year(clock));
     return 0;
+}
+
+int main() {
+    Avout raz{ "Erasmas", 3010 };
+    Avout jad{ "Jad", 4000 };
+    raz.announce();
+    jad.announce();
 }
