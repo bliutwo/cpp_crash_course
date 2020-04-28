@@ -8,54 +8,30 @@ struct Logger {
 
 struct ConsoleLogger : Logger {
     void log_transfer(long from, long to, double amount) override {
-        printf("%ld -> %ld: %f\n", from, to, amount);
+        printf("[cons] %ld -> %ld: %f\n", from, to, amount);
     }
 };
 
-struct FileLogger {
-    void log_transfer(long from, long to, double amount) {
+struct FileLogger : Logger {
+    void log_transfer(long from, long to, double amount) override {
         printf("[file] %ld,%ld,%f\n", from, to, amount);
     }
 };
 
-
-enum class LoggerType {
-    Console,
-    File
-};
-
 struct Bank {
-    Bank() : type { LoggerType::Console } { }
-
-    void set_logger(LoggerType new_type) {
-        type = new_type;
-    }
+    Bank(Logger& logger) : logger{ logger } { }
 
     void make_transfer(long from, long to, double amount) {
-        // snip
-        switch(type) {
-        case LoggerType::Console: {
-            consoleLogger.log_transfer(from, to, amount);
-            break;
-        } case LoggerType::File: {
-            fileLogger.log_transfer(from, to, amount);
-            break;
-        } default: {
-            throw std::logic_error("Unknown Logger type encountered.");
-        }
-        }
+        logger.log_transfer(from, to, amount);
     }
 private:
-    LoggerType type;
-    ConsoleLogger consoleLogger;
-    FileLogger fileLogger;
+    Logger& logger;
 };
 
 int main() {
-    Bank bank;
+    ConsoleLogger logger;
+    Bank bank{ logger };
     bank.make_transfer(1000, 2000, 49.95);
     bank.make_transfer(2000, 4000, 20.00);
-    bank.set_logger(LoggerType::File);
-    bank.make_transfer(3000, 2000, 75.00);
     return 0;
 }
