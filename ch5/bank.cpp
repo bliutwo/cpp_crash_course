@@ -19,7 +19,7 @@ struct FileLogger : Logger {
 };
 
 struct Bank {
-    // Bank(Logger* logger) : logger{ logger } {}
+    Bank(Logger* logger) : logger{ logger } {}
     void set_logger(Logger* new_logger) {
         logger = new_logger;
     }
@@ -34,7 +34,7 @@ private:
 int main() {
     ConsoleLogger console_logger;
     FileLogger file_logger;
-    Bank bank;
+    Bank bank(nullptr);
     bank.set_logger(&console_logger);
     bank.make_transfer(1000, 2000, 49.95);
     bank.set_logger(&file_logger);
