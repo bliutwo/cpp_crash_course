@@ -1,17 +1,23 @@
 #include <cstdio>
 #include <stdexcept>
 
+struct Logger {
+    virtual ~Logger() = default;
+    virtual void log_transfer(long from, long to, double amount) = 0;
+};
+
+struct ConsoleLogger : Logger {
+    void log_transfer(long from, long to, double amount) override {
+        printf("%ld -> %ld: %f\n", from, to, amount);
+    }
+};
+
 struct FileLogger {
     void log_transfer(long from, long to, double amount) {
         printf("[file] %ld,%ld,%f\n", from, to, amount);
     }
 };
 
-struct ConsoleLogger {
-    void log_transfer(long from, long to, double amount) {
-        printf("[cons] %ld -> %ld: %f\n", from, to, amount);
-    }
-};
 
 enum class LoggerType {
     Console,
