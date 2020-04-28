@@ -1,6 +1,7 @@
 #include <stdexcept>
 #include <cstdio>
 #include <cstring>
+#include <utility>
 
 struct SimpleString {
     SimpleString(size_t max_size)
@@ -87,6 +88,8 @@ struct SimpleStringOwner {
 
     SimpleStringOwner(const SimpleString& my_string): string { my_string } { }
 
+    SimpleStringOwner(SimpleString&& x) : string{ std::move(x) } { }
+
     ~SimpleStringOwner() {
         string.print("About to destroy");
     }
@@ -172,7 +175,7 @@ void own_a_string() {
     SimpleStringOwner b{ a };
 }
 
-int main() {
+int main5() {
     SimpleString a{ 50 };
     a.append_line("We apologize for the");
     SimpleString b{ 50 };
@@ -181,6 +184,19 @@ int main() {
     b.print("b");
     b = a;
     a.print("a");
+    b.print("b");
+    return 0;
+}
+
+int main() {
+    SimpleString a{ 50 };
+    a.append_line("We apologize for the");
+    SimpleString b{ 50 };
+    b.append_line("Last message");
+    a.print("a");
+    b.print("b");
+    b = std::move(a);
+    // a is "moved-from"
     b.print("b");
     return 0;
 }
