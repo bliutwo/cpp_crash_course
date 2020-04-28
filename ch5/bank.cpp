@@ -19,6 +19,7 @@ struct FileLogger : Logger {
 };
 
 struct Bank {
+    // Bank(Logger* logger) : logger{ logger } {}
     void set_logger(Logger* new_logger) {
         logger = new_logger;
     }
