@@ -2,20 +2,22 @@
 #include <map>
 #include <utility>
 #include <algorithm>
-#include <typeinfo>
 
-int get_key_with_max_value(std::map<int, int> m) {
+// https://stackoverflow.com/a/9371137
+template<typename T>
+T get_key_with_max_value(std::map<T, int> m) {
     auto max_key = std::max_element(m.begin(), m.end(),
-            [](const std::pair<int, int>& p1, const std::pair<int, int>& p2) {
+            [](const std::pair<T, int>& p1, const std::pair<T, int>& p2) {
                 return p1.second < p2.second;
             });
     return max_key->first;
 }
 
-int mode(const int* values, size_t length) {
-    std::map<int, int> m;
+template<typename T>
+T mode(const T* values, size_t length) {
+    std::map<T, int> m;
     for (size_t i{}; i < length; i++) {
-        int curr = values[i];
+        T curr = values[i];
         if ( m.find(curr) == m.end() ) {
             m[curr] = 1;
         } else {
