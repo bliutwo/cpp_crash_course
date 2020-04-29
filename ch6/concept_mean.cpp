@@ -11,7 +11,7 @@ concept bool Averageable() {
         };
 }
 
-template<typename T>
+template<Averageable T>
 T mean(const T* values, size_t length) {
     T result{};
     for (size_t i{}; i<length; i++) {
@@ -20,7 +20,7 @@ T mean(const T* values, size_t length) {
     return result / length;
 }
 
-int main() {
+int main1() {
     const double nums_d[] { 1.0f, 2.0f, 3.0f, 4.0f };
     const auto result1 = mean(nums_d, 4);
     printf("double: %f\n", result1);
@@ -33,5 +33,13 @@ int main() {
     const auto result3 = mean(nums_c, 4);
     printf("size_t: %zu\n", result3);
 
+    return 0;
+}
+
+int main() {
+    auto value1 = 0.0;
+    auto value2 = 1.0;
+    const double* values[] { &value1, &value2 };
+    mean(values, 2);
     return 0;
 }
