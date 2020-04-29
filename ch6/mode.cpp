@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <typeinfo>
 
-int get_max_key(std::map<int, int> m) {
+int get_key_with_max_value(std::map<int, int> m) {
     auto max_key = std::max_element(m.begin(), m.end(),
             [](const std::pair<int, int>& p1, const std::pair<int, int>& p2) {
                 return p1.second < p2.second;
@@ -22,7 +22,7 @@ int mode(const int* values, size_t length) {
             m[curr] += 1;
         }
     }
-    return get_max_key(m);
+    return get_key_with_max_value(m);
 }
 
 int main() {
