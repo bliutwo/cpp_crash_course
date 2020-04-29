@@ -58,6 +58,21 @@ struct FileLogger : Logger {
     }
 };
 
+struct Account {
+    Account() : balance{} {}
+    double get_balance() {
+        return balance;
+    }
+    void add_to_balance(double additive) {
+        balance += additive;
+    }
+    void subtract_from_balance(double subtractive) {
+        balance -= subtractive;
+    }
+private:
+    double balance;
+};
+
 template <typename T>
 struct Bank {
     Bank(Logger* logger, AccountDatabase<T>& db) : logger{ logger }, db{ db } {}
@@ -82,5 +97,11 @@ int main() {
     bank.make_transfer(1000, 2000, 49.95);
     bank.set_logger(&file_logger);
     bank.make_transfer(2000, 4000, 20.00);
+    return 0;
+}
+
+int main1() {
+    //InMemoryAccountDatabase<Account> db(1, 0.0);
+    //Bank<Account> bank(nullptr, db);
     return 0;
 }
