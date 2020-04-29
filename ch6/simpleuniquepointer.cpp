@@ -29,6 +29,11 @@ private:
     T* pointer;
 };
 
+template<typename T, typename... Arguments>
+SimpleUniquePointer<T> make_simple_unique(Arguments... arguments) {
+    return SimpleUniquePointer<T> { new T{ arguments... } };
+}
+
 struct Tracer {
     Tracer(const char* name) : name{ name } {
         printf("%s constructed.\n", name);
