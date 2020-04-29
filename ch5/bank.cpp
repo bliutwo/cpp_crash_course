@@ -1,5 +1,30 @@
 #include <cstdio>
 #include <stdexcept>
+#include <cstring>
+
+struct AccountDatabase {
+    virtual double retrieve_amount() = 0;
+    virtual void set_amount(double new_amount) = 0;
+    virtual long get_id() = 0;
+};
+
+struct InMemoryAccountDatabase : AccountDatabase {
+    InMemoryAccountDatabase(long id, double amount) : id{ id }, amount{ amount } {}
+    double retrieve_amount() override {
+        return amount;
+    }
+
+    void set_amount(double new_amount) override {
+        amount = new_amount;
+    }
+
+    long get_id() override {
+        return id;
+    }
+private:
+    long id;
+    double amount;
+};
 
 struct Logger {
     virtual ~Logger() = default;
@@ -7,9 +32,18 @@ struct Logger {
 };
 
 struct ConsoleLogger : Logger {
-    void log_transfer(long from, long to, double amount) override {
-        printf("[cons] %ld -> %ld: %f\n", from, to, amount);
+    ConsoleLogger(const char* s) {
+        prefix = new char[strlen(s)];
+        strncpy(prefix, s, strlen(s));
     }
+    ~ConsoleLogger() {
+        printf("Deleting prefix\n");
+        delete[] prefix;
+    }
+    void log_transfer(long from, long to, double amount) override {
+        printf("%s: [cons] %ld -> %ld: %f\n", prefix, from, to, amount);
+    }
+    char* prefix;
 };
 
 struct FileLogger : Logger {
@@ -19,7 +53,7 @@ struct FileLogger : Logger {
 };
 
 struct Bank {
-    Bank(Logger* logger) : logger{ logger } {}
+    Bank(Logger* logger, AccountDatabase& db) : logger{ logger }, db{ db } {}
     void set_logger(Logger* new_logger) {
         logger = new_logger;
     }
@@ -29,12 +63,14 @@ struct Bank {
     }
 private:
     Logger* logger{};
+    AccountDatabase& db;
 };
 
 int main() {
-    ConsoleLogger console_logger;
+    ConsoleLogger console_logger("wow");
     FileLogger file_logger;
-    Bank bank(nullptr);
+    InMemoryAccountDatabase db(1, 0.0);
+    Bank bank(nullptr, db);
     bank.set_logger(&console_logger);
     bank.make_transfer(1000, 2000, 49.95);
     bank.set_logger(&file_logger);
