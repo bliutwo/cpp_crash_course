@@ -3,8 +3,14 @@
 #include <utility>
 #include <algorithm>
 
-// https://stackoverflow.com/a/9371137
+
 template<typename T>
+concept bool Integer() {
+    return std::is_integral<T>::value;
+}
+
+// https://stackoverflow.com/a/9371137
+template<Integer T>
 T get_key_with_max_value(std::map<T, int> m) {
     auto max_key = std::max_element(m.begin(), m.end(),
             [](const std::pair<T, int>& p1, const std::pair<T, int>& p2) {
@@ -13,7 +19,7 @@ T get_key_with_max_value(std::map<T, int> m) {
     return max_key->first;
 }
 
-template<typename T>
+template<Integer T>
 T mode(const T* values, size_t length) {
     std::map<T, int> m;
     for (size_t i{}; i < length; i++) {
