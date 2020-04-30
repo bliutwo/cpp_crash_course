@@ -1,5 +1,6 @@
 #include <cstddef>
 #include <new>
+#include <cstdio>
 
 struct Bucket {
     const static size_t data_size{ 4096 };
@@ -32,6 +33,31 @@ struct Heap {
     bool bucket_used[n_heap_buckets]{};
 };
 
+Heap heap;
+
+void* operator new(size_t n_bytes) {
+    return heap.allocate(n_bytes);
+}
+
+void operator delete(void* p) {
+    return heap.free(p);
+}
+
 int main() {
+    printf("Buckets:   %p\n", heap.buckets);
+    auto breakfast = new unsigned int{ 0xC0FFEE };
+    auto dinner = new unsigned int { 0xDEADBEEF };
+    printf("Breakfast: %p 0x%x\n", breakfast, *breakfast);
+    printf("Dinner:    %p 0x%x\n", dinner, *dinner);
+    delete breakfast;
+    delete dinner;
+    try {
+        while (true) {
+            new char;
+            printf("Allocated a char.\n");
+        }
+    } catch (const std::bad_alloc&) {
+        printf("std::bad_alloc caught.\n");
+    }
     return 0;
 }
