@@ -6,14 +6,26 @@ namespace BroopKidron13::Shaltanac { // 1
         Pink,
         Russet
     };
+
+    struct JoopleBerryShrub {
+        const char* name;
+        Color shade;
+    };
+
+    bool is_more_mauvey(const JoopleBerryShrub& shrub) {
+        return shrub.shade == Color::Mauve;
+    }
 }
 
+using namespace BroopKidron13::Shaltanac;
+
 int main() {
-    using BroopKidron13::Shaltanac::Color;
-    // const auto shaltanac_grass { BroopKidron13::Shaltanac::Color::Russet /* 3 */};
-    const auto shaltanac_grass = Color::Russet;
-    // if (shaltanac_grass == BroopKidron13::Shaltanac::Color::Russet) {
-    if (shaltanac_grass == Color::Russet) {
+    const JoopleBerryShrub yours {
+        "The other Shaltanac",
+        Color::Mauve
+    };
+
+    if (is_more_mauvey(yours) /*4*/ ) {
         printf("The other Shaltanac's joopleberry shrub is always "
                "a more mauvey shade of pinky russet.\n");
     }
