@@ -1,7 +1,7 @@
 #include <cstdio>
 
-namespace BroopKidron13::Shaltanac { // 1
-    enum class Color { // 2
+namespace BroopKidron13::Shaltanac {
+    enum class Color {
         Mauve,
         Pink,
         Russet
@@ -17,12 +17,12 @@ namespace BroopKidron13::Shaltanac { // 1
     }
 }
 
-using namespace BroopKidron13::Shaltanac;
+using namespace BroopKidron13::Shaltanac; // 1
 
 int main() {
-    const JoopleBerryShrub yours {
+    const JoopleBerryShrub /*2*/ yours {
         "The other Shaltanac",
-        Color::Mauve
+        Color::Mauve // 3
     };
 
     if (is_more_mauvey(yours) /*4*/ ) {
