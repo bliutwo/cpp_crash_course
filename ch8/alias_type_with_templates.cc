@@ -2,8 +2,8 @@
 #include <stdexcept>
 
 template <typename To, typename From>
-struct NarrowCaster const {
-    To cast(From value) {
+struct NarrowCaster {
+    To cast(From value) const {
         const auto converted = static_cast<To>(value);
         const auto backwards = static_cast<From>(converted);
         if (value != backwards) throw std::runtime_error{ "Narrowed!" };
