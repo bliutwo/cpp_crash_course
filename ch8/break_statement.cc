@@ -32,18 +32,11 @@ private:
 };
 
 int main() {
-    for (const auto i : FibonacciRange{ 5000 } /*1*/) {
-        printf("%d ", i); // 2
-    }
-    printf("\n");
-    return 0;
-}
-
-int main1() {
-    FibonacciRange range{ 5000 };
-    const auto end = range.end(); // 1
-    for (auto x = range.begin() /*2*/; x != end /*3*/; ++x /*4*/) {
-        auto i = *x;
+    for (auto i : FibonacciRange{ 5000 }) {
+        if (i == 21) { // 1
+            printf("*** "); // 2
+            break; // 3
+        }
         printf("%d ", i);
     }
     printf("\n");
