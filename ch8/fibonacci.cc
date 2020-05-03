@@ -1,3 +1,5 @@
+#include <cstdio>
+
 struct FibonacciIterator {
     bool operator!=(int x) const {
         return x >= current; // 1
@@ -28,3 +30,11 @@ struct FibonacciRange {
 private:
     const int max;
 };
+
+int main() {
+    for (const auto i : FibonacciRange{ 5000 } /*1*/) {
+        printf("%d ", i); // 2
+    }
+    printf("\n");
+    return 0;
+}
