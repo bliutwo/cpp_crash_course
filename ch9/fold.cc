@@ -22,8 +22,9 @@ int main() {
     auto max = fold([](auto x, auto y) { return x > y ? x : y; }, data, data_len, -1 * inf);
     printf("Max: %d\n", max);
 
-    auto min = fold([](auto x, auto y) { return x < y ? x : y; }, data, data_len, inf);
-    printf("Min: %d\n", min);
+    int maximum = std::numeric_limits<int>::max();
+    auto min = fold([](auto x, auto y) { return x < y ? x : y; }, data, data_len, maximum);
+    printf("Min: %d\n", min);    
 
     return 0;
 }
