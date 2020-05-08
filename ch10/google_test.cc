@@ -8,7 +8,10 @@
 // figured it out, though.
 
 #include "gtest/gtest.h"
+#include "braking.h"
 
-TEST(AutoBrake, UnitTestName) {
-    // Unit test here
+TEST(AutoBrake, InitialCarSpeedIsZero) {
+    MockServiceBus bus{};
+    AutoBrake auto_brake{ bus };
+    ASSERT_FLOAT_EQ(0, auto_brake.get_speed_mps());
 }
