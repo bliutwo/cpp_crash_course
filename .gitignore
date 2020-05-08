@@ -1,3 +1,13 @@
 *.out
 *.sh
 *.exe
+ch10/CMakeCache.txt
+ch10/CMakeFiles/
+ch10/Makefile
+ch10/bin/
+*.cmake
+ch10/example
+ch10/googletest-build/
+ch10/googletest-download/
+ch10/googletest-src/
+ch10/lib/
