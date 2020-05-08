@@ -25,38 +25,34 @@ void sensitivity_greater_than_1() {
     assert_that(false, "no exception thrown");
 }
 
-// void speed_is_saved() {
-//     AutoBrake auto_brake{ [](const BrakeCommand&) {} };
-//     auto_brake.observe(SpeedUpdate{ 100L });
-//     assert_that(100L == auto_brake.get_speed_mps(), "speed not saved to 100");
-//     auto_brake.observe(SpeedUpdate{ 50L });
-//     assert_that(50L == auto_brake.get_speed_mps(), "speed not saved to 50");
-//     auto_brake.observe(SpeedUpdate{ 0L });
-//     assert_that(0L == auto_brake.get_speed_mps(), "speed not saved to 0");
-// }
-//
-// void alert_when_imminent() {
-//     int brake_commands_published{};
-//     AutoBrake auto_brake {
-//         [&brake_commands_published](const BrakeCommand&) {
-//             brake_commands_published++;
-//         }
-//     };
-//     auto_brake.set_collision_threshold_s(10L);
-//     auto_brake.observe(SpeedUpdate{ 100L });
-//     auto_brake.observe(CarDetected{ 100L, 0L });
-//     assert_that(brake_commands_published == 1, "brake commands published not one");
-// }
-//
-// void no_alert_when_not_imminent() {
-//     int brake_commands_published{};
-//     AutoBrake auto_brake{
-//         [&brake_commands_published](const BrakeCommand&) {
-//             brake_commands_published++;
-//         }
-//     };
-//     auto_brake.set_collision_threshold_s(2L);
-//     auto_brake.observe(SpeedUpdate{ 100L });
-//     auto_brake.observe(CarDetected{ 1000L, 50L });
-//     assert_that(brake_commands_published == 0, "brake command published");
-// }
+void speed_is_saved() {
+    MockServiceBus bus{};
+    AutoBrake auto_brake{ bus };
+
+    bus.speed_update_callback(SpeedUpdate{ 100L });
+    assert_that(100L == auto_brake.get_speed_mps(), "speed not saved to 100");
+    bus.speed_update_callback(SpeedUpdate{ 50L });
+    assert_that(50L == auto_brake.get_speed_mps(), "speed not saved to 50");
+    bus.speed_update_callback(SpeedUpdate{ 0L });
+    assert_that(0L == auto_brake.get_speed_mps(), "speed not saved to 0");
+}
+
+void alert_when_imminent() {
+    MockServiceBus bus{};
+    AutoBrake auto_brake{ bus };
+    auto_brake.set_collision_threshold_s(10L);
+    bus.speed_update_callback(SpeedUpdate{ 100L });
+    bus.car_detected_callback(CarDetected{ 100L, 0L });
+    assert_that(bus.commands_published == 1, "1 brake command was not published");
+    assert_that(bus.last_command.time_to_collision_s == 1L,
+                "time to collision not computed correctly.");
+}
+
+void no_alert_when_not_imminent() {
+    MockServiceBus bus{};
+    AutoBrake auto_brake{ bus };
+    auto_brake.set_collision_threshold_s(2L);
+    bus.speed_update_callback(SpeedUpdate{ 100L });
+    bus.car_detected_callback(CarDetected{ 1000L, 50L });
+    assert_that(bus.commands_published == 0, "brake command published");
+}
