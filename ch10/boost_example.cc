@@ -1,6 +1,12 @@
-#define BOOST_TEST_MODULE TestModuleName
+#define BOOST_TEST_MODULE AutoBrakeTest
 #include <boost/test/included/unit_test.hpp>
 
-BOOST_AUTO_TEST_CASE(TestA) {
-    // Unit Test A here
+struct MyTestFixture { };
+
+BOOST_FIXTURE_TEST_CASE(MyTestA, MyTestFixture) {
+    // Test A here
+}
+
+BOOST_FIXTURE_TEST_CASE(MyTestB, MyTestFixture) {
+    // Test B here
 }
