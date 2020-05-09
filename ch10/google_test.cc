@@ -1,4 +1,4 @@
-// NOTE: The commands for running this shit is the following:
+// NOTE: The commands for running this is the following:
 //
 // cmake .
 //
