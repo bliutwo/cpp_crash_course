@@ -28,7 +28,7 @@ struct IServiceBus {
     virtual void subscribe(CarDetectedCallback) = 0;
 };
 
-// TODO: Uncomment this block if not using google_mock.cc
+// TODO: uncomment if not using google_mock.cc
 /*
 struct MockServiceBus : IServiceBus {
     void publish(const BrakeCommand& cmd) override {

@@ -1,13 +1,24 @@
 // Adding Google Mock to a third-party unit-testing framework
 
 #include "braking.h"
+#include "gtest/gtest.h"
 #include "gmock/gmock.h"
+
+using ::testing::_;
+using ::testing::A;
+using ::testing::Field;
+using ::testing::DoubleEq;
+using ::testing::NiceMock;
+using ::testing::StrictMock;
+using ::testing::Invoke;
+
 
 struct MockServiceBus : IServiceBus {
     MOCK_METHOD1(publish, void(const BrakeCommand& cmd));
     MOCK_METHOD1(subscribe, void(SpeedUpdateCallback callback));
     MOCK_METHOD1(subscribe, void(CarDetectedCallback callback));
 };
+
 
 // TODO: where do I place this block?
 /*
@@ -16,22 +27,71 @@ MockServiceBus naggy_mock;
 ::testing::StrictMock<MockServiceBus> strict_mock;
 */
 
+struct NiceAutoBrakeTest : ::testing::Test {
+    NiceMock<MockServiceBus> bus;
+    AutoBrake auto_brake{ bus };
+};
 
-using ::testing::_;
+struct StrictAutoBrakeTest : ::testing::Test {
+    StrictAutoBrakeTest() {
+        EXPECT_CALL(bus, subscribe(A<CarDetectedCallback>()))
+            .Times(1)
+            .WillOnce(Invoke([this](const auto& x) {
+                car_detected_callback = x;
+            }));
+        EXPECT_CALL(bus, subscribe(A<SpeedUpdateCallback>()))
+            .Times(1)
+            .WillOnce(Invoke([this](const auto& x) {
+                speed_update_callback = x;
+            }));
+    }
+    CarDetectedCallback car_detected_callback;
+    SpeedUpdateCallback speed_update_callback;
+    StrictMock<MockServiceBus> bus;
+};
 
-// using ::testing::A;
+TEST_F(NiceAutoBrakeTest, InitialCarSpeedIsZero) {
+    ASSERT_DOUBLE_EQ(0, auto_brake.get_speed_mps());
+}
 
-using ::testing::Field;
-using ::testing::DoubleEq;
+TEST_F(NiceAutoBrakeTest, InitialSensitivityIsFive) {
+    ASSERT_DOUBLE_EQ(5, auto_brake.get_collision_threshold_s());
+}
 
+TEST_F(NiceAutoBrakeTest, SensitivityGreaterThanOne) {
+    ASSERT_ANY_THROW(auto_brake.set_collision_threshold_s(0.5L));
+}
+
+TEST_F(StrictAutoBrakeTest, NoAlertWhenNotImminent) {
+    AutoBrake auto_brake{ bus };
+
+    auto_brake.set_collision_threshold_s(2L);
+    speed_update_callback(SpeedUpdate{ 100L });
+    car_detected_callback(CarDetected{ 1000L, 50L });
+}
+
+TEST_F(StrictAutoBrakeTest, AlertWhenImminent) {
+    EXPECT_CALL(bus, publish(
+                        Field(&BrakeCommand::time_to_collision_s, DoubleEq({ 1L
+    })))
+                     ).Times(1);
+    AutoBrake auto_brake{ bus };
+
+    auto_brake.set_collision_threshold_s(10L);
+    speed_update_callback(SpeedUpdate{ 100L });
+    car_detected_callback(CarDetected{ 100L, 0L });
+}
+
+/*
 TEST(AutoBrakeTest, PublishIsCalled) {
     MockServiceBus bus;
     EXPECT_CALL(bus, publish(_));
-//     EXPECT_CALL(bus, publish(A<BrakeCommand>)); // TODO: why doesn't this work?
+    EXPECT_CALL(bus, publish(A<BrakeCommand>)); // TODO: why doesn't this work?
     EXPECT_CALL(bus, publish(Field(&BrakeCommand::time_to_collision_s,
                                    DoubleEq(1L)))).Times(1);
     // more to follow
 }
+*/
 
 int main(int argc, char** argv) {
     ::testing::GTEST_FLAG(throw_on_failure) = true;

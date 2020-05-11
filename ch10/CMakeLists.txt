@@ -32,6 +32,5 @@ endif()
 
 # Now simply link against gtest or gtest_main as needed. Eg
 add_executable(a.out google_mock.cc)
-# target_link_libraries(a.out gtest_main)
-# add_test(NAME example_test COMMAND a.out)
-target_link_libraries(a.out gmock_main)
+target_link_libraries(a.out gtest_main gmock_main)
+add_test(NAME example_test COMMAND a.out)
