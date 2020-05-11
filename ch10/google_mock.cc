@@ -86,16 +86,19 @@ TEST_F(StrictAutoBrakeTest, AlertWhenImminent) {
 TEST(AutoBrakeTest, PublishIsCalled) {
     MockServiceBus bus;
     EXPECT_CALL(bus, publish(_));
-    EXPECT_CALL(bus, publish(A<BrakeCommand>)); // TODO: why doesn't this work?
+    // EXPECT_CALL(bus, publish(A<BrakeCommand>())); // TODO: why doesn't this work?
     EXPECT_CALL(bus, publish(Field(&BrakeCommand::time_to_collision_s,
                                    DoubleEq(1L)))).Times(1);
     // more to follow
 }
 */
 
+
+/*
 int main(int argc, char** argv) {
     ::testing::GTEST_FLAG(throw_on_failure) = true;
     ::testing::InitGoogleMock(&argc, argv);
     // Unit test as usual, Google Mock is initialized
     printf("Wow\n");
 }
+*/
