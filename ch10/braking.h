@@ -29,7 +29,7 @@ struct IServiceBus {
 };
 
 // TODO: uncomment if not using google_mock.cc
-/*
+
 struct MockServiceBus : IServiceBus {
     void publish(const BrakeCommand& cmd) override {
         commands_published++;
@@ -46,7 +46,7 @@ struct MockServiceBus : IServiceBus {
     SpeedUpdateCallback speed_update_callback{};
     CarDetectedCallback car_detected_callback{};
 };
-*/
+
 
 struct AutoBrake {
     AutoBrake(IServiceBus& bus)
