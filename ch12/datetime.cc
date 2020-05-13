@@ -41,3 +41,10 @@ TEST_CASE("date and date_duration support addition") {
     auto d2 = d1 + dur;
     REQUIRE(d2 == boost::gregorian::from_string("2019/8/1"));
 }
+
+TEST_CASE("boost::gregorian::date supports periods") {
+    boost::gregorian::date d1{ 1986, 9, 15 };
+    boost::gregorian::date d2{ 2019, 8, 1 };
+    boost::gregorian::date_period p{ d1, d2 };
+    REQUIRE(p.contains(boost::gregorian::date{ 1987, 10, 27 }));
+}
