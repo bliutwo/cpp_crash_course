@@ -1,5 +1,4 @@
 *.out
-*.sh
 *.exe
 ch10/CMakeCache.txt
 ch10/CMakeFiles/
