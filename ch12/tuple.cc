@@ -1,14 +1,8 @@
 #define CATCH_CONFIG_MAIN
 #include "../catch.hpp"
 #include <tuple>
-
-struct Socialite { const char* birthname; };
-struct Valet { const char* surname; };
-Socialite bertie{ "Wilberforce" };
-Valet reginald{ "Jeeves" };
-
-struct Acquaintance { const char* nickname; };
-Acquaintance hildebrand{ "Tuppy" };
+#include "headers/socialites.h"
+#include "headers/Acquaintance.h"
 
 TEST_CASE("std::tuple permits access to members with std::get") {
     using Trio = std::tuple<Socialite, Valet, Acquaintance>;

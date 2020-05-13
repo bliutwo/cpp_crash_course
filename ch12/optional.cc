@@ -1,13 +1,7 @@
 #define CATCH_CONFIG_MAIN
 #include "../catch.hpp"
 #include <optional>
-
-struct TheMatrix {
-    TheMatrix(int x) : iteration { x } { }
-    const int iteration;
-};
-
-enum Pill { Red, Blue };
+#include "headers/TheMatrix.h"
 
 std::optional<TheMatrix> take(Pill pill) {
     if (pill == Pill::Blue) return TheMatrix{ 6 };

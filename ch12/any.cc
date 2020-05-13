@@ -3,11 +3,7 @@
 #define CATCH_CONFIG_MAIN
 #include "../catch.hpp"
 #include <any>
-
-struct EscapeCapsule {
-    EscapeCapsule(int x) : weight_kg{ x } { }
-    int weight_kg;
-};
+#include "headers/EscapeCapsule.h"
 
 TEST_CASE("std::any allows us to std::any_cast into a type") {
     std::any hagunemnon;

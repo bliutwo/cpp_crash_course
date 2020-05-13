@@ -1,11 +1,7 @@
 #define CATCH_CONFIG_MAIN
 #include "../catch.hpp"
 #include <utility>
-
-struct Socialite { const char* birthname; };
-struct Valet { const char* surname; };
-Socialite bertie{ "Wilberforce" };
-Valet reginald{ "Jeeves" };
+#include "headers/socialites.h" 
 
 TEST_CASE("std::pair permits access to members") {
     std::pair<Socialite, Valet> inimitable_duo{ bertie, reginald };
