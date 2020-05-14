@@ -65,3 +65,24 @@ TEST_CASE("std::array has convenience methods") {
         REQUIRE(fib.back() == fib[3]);
     }
 }
+
+// Obtaining a pointer to the first element of a std::array
+TEST_CASE("We can obtain a pointer to the first element using") {
+    std::array<char, 9> color{ 'o', 'c', 't', 'a', 'r', 'i', 'n', 'e' };
+    const auto* color_ptr = color.data();
+
+    SECTION("data") {
+        REQUIRE(*color_ptr == 'o');
+    }
+    SECTION("address-of at(0)") {
+        REQUIRE(&color.at(0) == color_ptr);
+    }
+    SECTION("address-of [0]") {
+        REQUIRE(&color[0] == color_ptr);
+    }
+}
+
+TEST_CASE("std::array begin/end form a half-open range") {
+    std::array<int, 0> e{};
+    REQUIRE(e.begin() == e.end());
+}
