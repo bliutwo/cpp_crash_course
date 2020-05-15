@@ -1,6 +1,9 @@
 #define CATCH_CONFIG_MAIN
 #include "../catch.hpp"
 #include <vector>
+#include <utility>
+#include <array>
+#include <cstdint>
 
 TEST_CASE("std::vector supports default construction") {
     std::vector<const char*> vec;
@@ -52,4 +55,37 @@ TEST_CASE("std::vector push_back places new elements") {
     std::vector<int> zeros(3, 0);
     zeros.push_back(10);
     REQUIRE(zeros[3] == 10);
+}
+
+TEST_CASE("std::vector emplace methods forward arguments") {
+    std::vector<std::pair<int, int>> factors;
+    factors.emplace_back(2, 30);
+    factors.emplace_back(3, 20);
+    factors.emplace_back(4, 15);
+    factors.emplace(factors.begin(), 1, 60);
+    REQUIRE(factors[0].first == 1);
+    REQUIRE(factors[0].second == 60);
+}
+
+TEST_CASE("std::vector exposes size management methods") {
+    std::vector<std::array<uint8_t, 1024>> kb_store;
+    REQUIRE(kb_store.max_size() > 0);
+    REQUIRE(kb_store.empty());
+
+    size_t elements{ 1024 };
+    kb_store.reserve(elements);
+    REQUIRE(kb_store.empty());
+    REQUIRE(kb_store.capacity() == elements);
+
+    kb_store.emplace_back();
+    kb_store.emplace_back();
+    kb_store.emplace_back();
+    REQUIRE(kb_store.size() == 3);
+
+    kb_store.shrink_to_fit();
+    REQUIRE(kb_store.capacity() >= 3);
+
+    kb_store.clear();
+    REQUIRE(kb_store.empty());
+    REQUIRE(kb_store.capacity() >= 3);
 }
