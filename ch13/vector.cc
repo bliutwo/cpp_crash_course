@@ -31,3 +31,25 @@ TEST_CASE("std::vector supports construction from iterators") {
     REQUIRE(fib_vec[4] == 5);
     REQUIRE(fib_vec.size() == fib_arr.size());
 }
+
+TEST_CASE("std::vector assign replaces existing elements") {
+    std::vector<int> message{ 13, 80, 110, 114, 102, 110, 101 };
+    REQUIRE(message.size() == 7);
+    message.assign({ 67, 97, 101, 115, 97, 114});
+    REQUIRE(message[5] == 114);
+    REQUIRE(message.size() == 6);
+}
+
+TEST_CASE("std::vector insert places new elements") {
+    std::vector<int> zeros(3, 0);
+    auto third_element = zeros.begin() + 2;
+    zeros.insert(third_element, 10);
+    REQUIRE(zeros[2] == 10);
+    REQUIRE(zeros.size() == 4);
+}
+
+TEST_CASE("std::vector push_back places new elements") {
+    std::vector<int> zeros(3, 0);
+    zeros.push_back(10);
+    REQUIRE(zeros[3] == 10);
+}
