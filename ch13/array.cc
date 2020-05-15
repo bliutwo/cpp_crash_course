@@ -66,7 +66,6 @@ TEST_CASE("std::array has convenience methods") {
     }
 }
 
-// Obtaining a pointer to the first element of a std::array
 TEST_CASE("We can obtain a pointer to the first element using") {
     std::array<char, 9> color{ 'o', 'c', 't', 'a', 'r', 'i', 'n', 'e' };
     const auto* color_ptr = color.data();
@@ -85,4 +84,24 @@ TEST_CASE("We can obtain a pointer to the first element using") {
 TEST_CASE("std::array begin/end form a half-open range") {
     std::array<int, 0> e{};
     REQUIRE(e.begin() == e.end());
+}
+
+TEST_CASE("std::array iterators are pointer-like") {
+    std::array<int, 3> easy_as{ 1, 2, 3 };
+    auto iter = easy_as.begin();
+    REQUIRE(*iter == 1);
+    ++iter;
+    REQUIRE(*iter == 2);
+    ++iter;
+    REQUIRE(*iter == 3);
+    ++iter;
+    REQUIRE(iter == easy_as.end());
+}
+
+TEST_CASE("std::array can be used as a range expression") {
+    std::array<int, 5> fib{ 1, 1, 2, 3, 5 };
+    int sum{};
+    for (const auto element : fib)
+        sum += element;
+    REQUIRE(sum == 12);
 }
