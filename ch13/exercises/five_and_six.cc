@@ -47,19 +47,22 @@ private:
 
 long cached_fib_sum(const size_t& n) {
     static std::map<long, long> cache;
-    // TODO: implement me
-    return 0;
+    if ( cache.find(n) == cache.end() ) {
+        cache[n] = fib_sum(n);
+    }
+    return cache[n];
 }
 
 int main() {
     size_t samples{ 1'000'000 };
+    std::vector<long> cache;
     std::chrono::nanoseconds elapsed;
     {
         Stopwatch stopwatch{elapsed};
         volatile double answer;
         while(samples--) {
-            answer = fib_sum(random());
-            //answer = cached_fib_sum(random());
+            //answer = fib_sum(random());
+            answer = cached_fib_sum(random());
         }
     }
     printf("Elapsed: %g s.\n", elapsed.count() / 1'000'000'000.);
